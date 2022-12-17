@@ -17,11 +17,54 @@ int main(int argc, char **argv) {
     FILE *fp = fopen(argv[2], "r");
     size_t objnum = atoi(argv[1]);
     Object objects[objnum];
-    for (int i = 0; i < objnum; i++) {
-        if (fscanf(fp, "%lf %lf %lf %lf %lf", &objects[i].m, &objects[i].x, &objects[i].vx, &objects[i].y, &objects[i].vy) == EOF) {
-            objects[i].m = 0.0; objects[i].x = cond.width; objects[i].vx = 0.0; objects[i].y = cond.height; objects[i].vy = 0.0;
-        } // 盤面の"常に外側の場所に"質量0の物体を置く
+
+
+
+    //
+    char s[objnum][100];
+    while (1) {
+      fgets(s[0], 100, fp);
+      if (s[0][0] != '#') {
+        break;
+      }
+    } // 初めて数値データが来たときに外に出る
+
+    for (int i = 0; i < objnum; i++) { // ある行をピックアップ
+      int s_p = 0;
+      char t[20];
+      double data_list[5];
+      for (int k = 0; k < 5; k++) { // ある物理量をピックアップ
+        int t_p = 0;
+        while (s[i][s_p] != ' ' && s[i][s_p] != '\n') {
+          t[t_p] = s[i][s_p];
+          s_p++;
+          t_p++;
+        }
+        t[t_p] = '\0';
+        s_p++;
+        data_list[k] = atof(t);
+      }
+
+      objects[i].m = data_list[0];
+      objects[i].x = data_list[1];
+      objects[i].vx = data_list[2];
+      objects[i].y = data_list[3];
+      objects[i].vy = data_list[4];
+
+      if (fgets(s[i+1], 100, fp) == NULL) {
+        for (int i2 = i + 1; i2 < objnum; i2++) {
+          objects[i2].m = 0;
+          objects[i2].x = cond.width;
+          objects[i2].vx = 0;
+          objects[i2].y = cond.height;
+          objects[i2].vy = 0;
+        }
+        break;
+      }
     }
+    //
+
+
 
     // シミュレーション. ループは整数で回しつつ、実数時間も更新する
     const double stop_time = 400;
