@@ -18,10 +18,10 @@ printf("\n(%zu, %zu, %zu, %zu, %zu)\n", sizeof(s_end), sizeof(s3), sizeof(s2), s
 ```
 (128, 128, 136, 128, 128)
 ```
-追記　パディングの状況については、struct_alignment.md に記載する。
+追記　パディングの状況については、struct_alignment.md に記載。
 
 ## 課題2
-未解決
+struct_compare.md に記載。
 
 ## 課題3
 まず、構造体 Object を以下のように拡張することで、x軸方向の物理量を追加した。さらに、他の関数についてy軸方向の物理量に施していたものと全く同じ処理をx軸方向にも施すようにした。
